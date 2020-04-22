@@ -9,4 +9,6 @@ Test client  makes a request to a test  endpoint and sees if it has redirections
 If there are limited/managed redirectionss it will attempt to read the body of the final url.
 If there is a cyclic redirection - it will stop after TooManyRedirects exception is raised
 
-Note: Default limit for body is 10000 bytes
+Launch:
+1.python3 server.py
+2.pytest -s -v (don't forget the flags, otherwize the output won't be shown)

@@ -3,9 +3,9 @@ from aiohttp.web import (Response, StreamResponse, RouteTableDef,
                          Application, run_app, HTTPTemporaryRedirect)
 
 routes = RouteTableDef()
-char_qty = 10000
+char_qty = 10000 # number of chars sent to client
 
-# Manager Redirection endpoints
+# Managed Redirection endpoints
 @routes.get('/first_endpoint', name='first_endpoint')
 async def first_endpoint(request):
     location = request.app.router['second_endpoint'].url_for()
@@ -28,7 +28,9 @@ async def final_endpoint(request):
     await response.prepare(request)
     await _write_resp(response)
     response.force_close()
+
     return response
+
 
 # Cyclic Endpoints
 @routes.get('/first_cyclic_endpoint', name='first_cyclic_endpoint')
@@ -46,12 +48,14 @@ async def second_cyclic_endpoint(request):
 async def _write_resp(response):
     async for line in _gen_rnd_data():
         await response.write(line.encode('utf-8'))
+
     await response.write_eof()
 
 
 async def _gen_rnd_data(chunk_size=1):
     letters = string.ascii_lowercase
     ind = 1
+
     while ind < char_qty:
         yield ''.join(random.choice(letters) for i in range(chunk_size))
         ind += 1
